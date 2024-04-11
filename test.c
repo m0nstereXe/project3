@@ -32,7 +32,7 @@ int main(){
 
     t_free(ptr, n*sizeof(int));
 
-    n = 100;
+    n = 10;
     void *a= t_malloc(n*n*sizeof(int)), *b = t_malloc(n*n*sizeof(int)), *c = t_malloc(n*n*sizeof(int));
     int aa[n][n], bb[n][n], cc[n][n];
     for(int i = 0;i<n*n;i++){

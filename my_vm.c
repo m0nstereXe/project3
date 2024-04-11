@@ -35,7 +35,7 @@ void set_physical_mem(){
     L2_NODE **L1 = (L2_NODE**)(real_mem+MEMSIZE);
     
     for(int i = 0; i < BITMAP_SIZE; i++){
-        bitmap[i] = 0;
+        bitmap[i] = 0, virtmap[i] = 0;
     }
     for(int i = 0; i < L1_SIZE; i++){
         L1[i] = NULL;
@@ -152,7 +152,7 @@ int get_value(unsigned int vp, void *dst, size_t n){
         if(!getbit(virtmap,ppage)) return -1;
         ((char*)dst)[i] = *(char*)translate(vp+i);
     }
-    pthread_mutex_lock(&lock);
+    pthread_mutex_unlock(&lock);
     return 0;
 }
 
@@ -172,8 +172,7 @@ void mat_mult(unsigned int a, unsigned int b, unsigned int c, size_t l, size_t m
 }
 
 void add_TLB(unsigned int vpage, unsigned int ppage){
-    ull tlbmask = (1<<TLB_BITS)-1;
-    ull hash = vpage & tlbmask;
+    ull hash = tlb_hash(vpage);
     //simply overwrite the old entry, is this eviction ???
     TLB[hash].vpage = vpage;
     TLB[hash].ppage = ppage;
